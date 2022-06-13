@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.model.dao.BoardDAO">
+	<insert id="insertBoard" parameterType="Board">
+		insert into board(title,
+		content, memberId,lastModified) values(#{title}, #{content}, #{memberId},now())
+	</insert>
+	
+	<sql id="commonSelect">
+		select * from board
+	</sql>
+
+	<select id="selectBoard" parameterType="int" resultType="Board">
+		<include refid="commonSelect" />
+		where no = #{no}
+	</select>
+	
+	<select id="selectBoardTop" resultType="Board">
+		<include refid="commonSelect"/>
+		limit 5
+	</select>
+
+	<select id="selectBoardList" resultType="Board">
+		<include refid="commonSelect"></include>
+	</select>
+
+	<update id="updateBoard" parameterType="Board">
+		update board set
+		title =
+		#{title}, content = #{content} where no = #{no}
+	</update>
+	
+	<update id="readBoard"> UPDATE board SET readcnt = readcnt + 1 WHERE no=#{no} </update>
+
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where
+		no = #{no}
+	</delete>
+
+	<select id="selectBoardListByName" parameterType="map"
+		resultType="Board">
+		<include refid="commonSelect" />
+		<include refid="search" />
+	</select>
+
+	<sql id="search">
+	<where>
+		<choose>
+			<when test="search_option != '' and search_option != null and search_option == 'id'">
+				memberId like concat('%',#{keyword},'%')
+			</when>
+			<when test="search_option != '' and search_option != null and search_option == 'content'">
+				content like concat('%',#{keyword},'%')
+			</when>
+		</choose>
+	</where>
+	</sql>
+
+</mapper>

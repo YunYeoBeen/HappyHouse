@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.model.dao.CommentDAO">
+	<sql id="commonSelect">
+		select * from comment 
+	</sql>
+	
+	<select id="getCommentWriter" parameterType="int" resultType="string">
+		select writer from comment where cno=#{cno}
+	</select>
+	
+	<insert id="commentInsert" parameterType="Comment">
+		insert into comment(bno, content, writer,writedate)
+		values(#{bno},#{content},#{writer},now())
+	</insert>
+
+	<delete id="commentDelete" parameterType="int">
+		delete from comment where
+		cno =
+		#{cno}
+	</delete>
+
+	<update id="commentUpdate" parameterType="Comment">
+		update comment set
+		content=#{content}
+		where cno = #{cno}
+	</update>
+
+	<select id="commentTotal" parameterType="int" resultType="int">
+		select count(*) from
+		comment where bno=#{bno}
+	</select>
+
+	<select id="commentList" resultType="Comment" parameterType="int">
+		<include refid="commonSelect"/> where bno=#{bno}
+	</select>
+	
+	<select id="getBnoByCno" resultType="int" parameterType="int">
+		select bno from comment where cno = #{cno}
+	</select>
+
+</mapper>

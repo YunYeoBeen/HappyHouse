@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.model.dao.QnaDAO">
+	<sql id="commonSelect">
+		select * from qna
+	</sql>
+	
+	<insert id="insertQna" parameterType="Qna">
+		insert into qna(title, content, writer, writedate)
+		values(#{title},#{content},#{writer},now())
+	</insert>
+	
+	<delete id="deleteQna" parameterType="int">
+		delete from qna where
+		id = #{id}
+	</delete>
+	
+	<update id="updateQna" parameterType="Qna">
+		update qna set title=#{title}, content=#{content}
+		where id = #{id}
+	</update>
+	
+	<update id="readQna"> UPDATE qna SET readcnt = readcnt + 1 WHERE id=#{id} </update>
+
+	
+	<select id="selectQna" parameterType="int" resultType="Qna">
+		<include refid="commonSelect"/>
+		where id = #{id}
+	</select>
+	
+	
+	<select id="selectQnaList" resultType="Qna">
+		<include refid="commonSelect"></include>
+	</select>
+
+</mapper>
